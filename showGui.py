@@ -10,7 +10,9 @@
 import sys
 import random
 import string
+import time
 from PySide import QtCore, QtGui
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -144,7 +146,14 @@ class Ui_MainWindow(object):
         self.Voltage_LCD.display(random.randint(0,100))
         self.Current_LCD.display(random.randint(0,100))
         self.label_9.setText(str(temp_val))
-		
+        self.label_10.setText(QtGui.QApplication.translate("MainWindow", "0", None, QtGui.QApplication.UnicodeUTF8))
+        self._update_timer = QtCore.QTimer()
+        self._update_timer.timeout.connect(self.update_label)
+        self._update_timer.start(1000) # milliseconds
+
+    def update_label(self):
+        self.label_10.setText(QtGui.QApplication.translate("MainWindow", str(int(self.label_10.text()) + 1), None, QtGui.QApplication.UnicodeUTF8))
+
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton.setText(QtGui.QApplication.translate("MainWindow", "Dbug", None, QtGui.QApplication.UnicodeUTF8))
@@ -154,7 +163,7 @@ class Ui_MainWindow(object):
         self.label_2.setText(QtGui.QApplication.translate("MainWindow", "Current (A)", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setText(QtGui.QApplication.translate("MainWindow", "Voltage (V)", None, QtGui.QApplication.UnicodeUTF8))
         self.label_5.setText(QtGui.QApplication.translate("MainWindow", "Timer", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_10.setText(QtGui.QApplication.translate("MainWindow", "00:00:00", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_10.setText(QtGui.QApplication.translate("MainWindow", "0", None, QtGui.QApplication.UnicodeUTF8))
         self.label_8.setText(QtGui.QApplication.translate("MainWindow", "Temp (F)", None, QtGui.QApplication.UnicodeUTF8))
         self.label_9.setText(QtGui.QApplication.translate("MainWindow", "0", None, QtGui.QApplication.UnicodeUTF8))
         self.label_6.setText(QtGui.QApplication.translate("MainWindow", "Velocity", None, QtGui.QApplication.UnicodeUTF8))
@@ -164,7 +173,6 @@ class ControlMainWindow(QtGui.QMainWindow):
         super(ControlMainWindow, self).__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
- 
 
 app = QtGui.QApplication(sys.argv)
 mySW = ControlMainWindow()
